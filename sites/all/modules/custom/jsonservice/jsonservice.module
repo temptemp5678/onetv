@@ -1,0 +1,115 @@
+<?php
+/**
+ * @file
+ *
+ */
+
+/**
+ * Implements hook_menu()
+ */
+function jsonservice_menu() {
+  $items = array();
+
+  /** - - - - - - node - - - - - - - - - - - - - - - - - - - - - - - - - -  */
+  $items['jsonservice/node/create'] = array(
+    'title' => 'Create Page',
+    'page callback' => '_jsonservice_node_create',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+    'file' => 'inc/jsonservice_node_action.page.inc',
+  );
+  $items['jsonservice/node/update'] = array(
+    'title' => 'Create Page',
+    'page callback' => '_jsonservice_node_update',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+    'file' => 'inc/jsonservice_node_action.page.inc',
+  );
+
+  $items['jsonservice/node-answerset/create'] = array(
+    'title' => 'Create Page',
+    'page callback' => '_jsonservice_node_answerset_create',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+    'file' => 'inc/jsonservice_node_answerset_action.page.inc',
+  );
+  $items['jsonservice/node-answerset/update'] = array(
+    'title' => 'Create Page',
+    'page callback' => '_jsonservice_node_answerset_update',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+    'file' => 'inc/jsonservice_node_answerset_action.page.inc',
+  );
+
+  /** - - - - - - Term - - - - - - - - - - - - - - - - - - - - - - - - - -  */
+  $items['jsonservice/term/create'] = array(
+    'title' => 'Create Page',
+    'page callback' => '_jsonservice_term_create',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+    'file' => 'inc/jsonservice_term_action.page.inc',
+  );
+  $items['jsonservice/term/delete'] = array(
+    'title' => 'Delete Page',
+    'page callback' => '_jsonservice_term_delete',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+    'file' => 'inc/jsonservice_term_action.page.inc',
+  );
+  $items['jsonservice/term/update'] = array(
+    'title' => 'Create Page',
+    'page callback' => '_jsonservice_term_update',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+    'file' => 'inc/jsonservice_term_action.page.inc',
+  );
+
+  $items['jsonservice/term-quesset-field/create'] = array(
+    'title' => 'Create Page',
+    'page callback' => '_jsonservice_term_quesset_field_create',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+    'file' => 'inc/jsonservice_term_quesset_field_action.page.inc',
+  );
+  $items['jsonservice/term-quesset-field/update'] = array(
+    'title' => 'Create Page',
+    'page callback' => '_jsonservice_term_quesset_field_update',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+    'file' => 'inc/jsonservice_term_quesset_field_action.page.inc',
+  );
+
+  /** - - - - - - User - - - - - - - - - - - - - - - - - - - - - - - - - -  */
+  $items['jsonservice/user/admin-menu/enable'] = array(
+    'title' => 'Enable Admin Menu Status',
+    'page callback' => '_jsonservice_user_admin_menu',
+    'page arguments' => array('enable'),
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+    'file' => 'inc/jsonservice_user_action.page.inc',
+  );
+  $items['jsonservice/user/admin-menu/disable'] = array(
+    'title' => 'Disable Admin Menu Status',
+    'page callback' => '_jsonservice_user_admin_menu',
+    'page arguments' => array('disable'),
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+    'file' => 'inc/jsonservice_user_action.page.inc',
+  );
+  $items['jsonservice/user/set-date-range'] = array(
+    'title' => 'Set Date Range',
+    'page callback' => '_jsonservice_user_set_date_range',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+    'file' => 'inc/jsonservice_user_action.page.inc',
+  );
+  $items['jsonservice/user/update'] = array(
+    'title' => 'Set Date Range',
+    'page callback' => '_jsonservice_user_update',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+    'file' => 'inc/jsonservice_user_action.page.inc',
+  );
+
+  return $items;
+}

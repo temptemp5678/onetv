@@ -1,0 +1,9 @@
+name = JSON INFO
+description = JSON Source file
+core = 7.x
+package = Zen Other
+
+files[] = class/basic_source_json.class.inc
+files[] = class/json_data.class.inc
+
+version  = 7.x-1.1

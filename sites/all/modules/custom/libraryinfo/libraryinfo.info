@@ -1,0 +1,6 @@
+name = Library Info
+description = Some Library File
+core = 7.x
+package = Zen Other
+
+version  = 7.x-1.1

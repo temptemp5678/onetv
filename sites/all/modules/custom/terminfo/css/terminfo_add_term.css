@@ -1,0 +1,23 @@
+#taxonomy-form-term .form-item {
+  float: left;
+  clear: both;
+}
+
+#taxonomy-form-term .form-item > label{
+  float: left;
+  width: 100px;
+  text-align: right;
+  margin-right: 20px;
+  font-weight: 200;
+}
+
+#taxonomy-form-term .form-item .form-control {
+  width: auto;
+  float: left;
+}
+
+#taxonomy-form-term .form-submit {
+  float: left;
+  margin-left: 200px;
+  padding: 6px 24px;
+}

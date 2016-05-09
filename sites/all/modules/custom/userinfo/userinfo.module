@@ -1,0 +1,89 @@
+<?php
+/**
+ * @file
+ *
+ */
+/**
+ * Implements hook_menu()
+ */
+function userinfo_menu() {
+  $items = array();
+
+  $items['manage/user/list'] = array(
+    'title' => 'User List',
+    'page callback' => '_userinfo_user_list',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+    'file' => 'inc/userinfo_user_list.page.inc',
+  );
+  $items['manage/user/create'] = array(
+    'title' => 'Create User',
+    'page callback' => '_userinfo_create_user_form',
+    'access arguments' => array('access role siteadmin'),
+    'type' => MENU_CALLBACK,
+    'file' => 'inc/userinfo_user_form.page.inc',
+  );
+  $items['manage/user/edit/%'] = array(
+    'title' => 'Edit User',
+    'page callback' => '_userinfo_edit_user_form',
+    'page arguments' => array(3),
+    'access arguments' => array('access role siteadmin'),
+    'type' => MENU_CALLBACK,
+    'file' => 'inc/userinfo_user_form.page.inc',
+  );
+
+  return $items;
+}
+
+/*
+ * Implementation of hook_init()
+ */
+function userinfo_init() {
+
+}
+
+/** - - - - - - field - - - - - - - - - - - - - - - - - - - - - - - - - -  */
+
+/**
+ * Generate a new product object
+ * @return integer, pid;
+ */
+function _query_chassis_pid($keyword = NULL) {
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', 'commerce_product')
+        ->entityCondition('bundle', array('chassis'))
+        ->propertyCondition('title', $keyword, '=')
+        ->propertyCondition('status', 1);
+  $result = $query->execute();
+
+  $pids = NULL;
+  if (isset($result['commerce_product'])) {
+    $pids = array_keys($result['commerce_product']);
+  }
+
+  // dvm($pids);
+  return $pids;
+}
+
+/**
+ * Generate a new product object
+ * @return integer, pid;
+ */
+function _query_card_pid($keyword = NULL) {
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', 'commerce_product')
+        ->entityCondition('bundle', array('card'))
+        ->propertyCondition('title', $keyword, '=')
+        ->propertyCondition('status', 1);
+  $result = $query->execute();
+
+  $pids = NULL;
+  if (isset($result['commerce_product'])) {
+    $pids = array_keys($result['commerce_product']);
+  }
+
+  // dvm($pids);
+  return $pids;
+}
+
+/** - - - - - - field - - - - - - - - - - - - - - - - - - - - - - - - - -  */

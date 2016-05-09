@@ -1,0 +1,91 @@
+<?php
+/**
+ * @file
+ *
+ */
+
+/**
+ * Implements hook_init()
+ */
+function libraryinfo_init() {
+  drupal_add_library('libraryinfo', 'libraryinfo_angularjs');
+  drupal_add_library('libraryinfo', 'libraryinfo_font_awsome');
+}
+
+/**
+ * Implements hook_library().
+ *
+   drupal_add_library('libraryinfo', 'libraryinfo_angularjs');
+ *
+ */
+function libraryinfo_library() {
+  $libraries = array();
+
+  /**
+   * "AngularJS "
+   */
+  $libraries['libraryinfo_angularjs'] = array(
+    'title' => 'AngularJS',
+    'version' => '1.4.7',
+    'website' => 'https://angularjs.org/',
+    'js' => array(
+      'https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.js' => array('type' => 'external'),
+      'https://cdnjs.cloudflare.com/ajax/libs/angular-ui/0.4.0/angular-ui.min.js' => array('type' => 'external'),
+      'https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-route.min.js' => array('type' => 'external'),
+      'https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-animate.min.js' => array('type' => 'external'),
+      'https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-aria.min.js' => array('type' => 'external'),
+      'https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-sanitize.min.js' => array('type' => 'external'),
+      'https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-messages.min.js' => array('type' => 'external'),
+      'https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-resource.min.js' => array('type' => 'external'),
+    ),
+  );
+
+  /**
+   * "Chart.js"
+   * https://github.com/nnnick/Chart.js
+   * 2.0.0-alpha4
+   */
+  $chart_js_path = libraries_get_path('Chart.js-master') . '/';
+  $libraries['libraryinfo_chart_js'] = array(
+    'title' => 'Chart JS',
+    'version' => '2.0.0',
+    'website' => 'http://chartjs.org/',
+    'js' => array(
+      $chart_js_path . 'Chart.js' => array(),
+    ),
+  );
+
+  /**
+   * "Font Awesome"
+   * Font Awesome is a jQuery plugin that gives you the ability to make any element on your page always stay visible.
+   */
+  $font_awsome_path = libraries_get_path('font-awesome-4.5.0') . '/';
+  $libraries['libraryinfo_font_awsome'] = array(
+    'title' => 'Font Awesome',
+    'version' => 'v4.5.0 ',
+    'website' => 'https://github.com/FortAwesome/Font-Awesome/',
+    'css' => array(
+      $font_awsome_path . 'css/font-awesome.min.css' => array(),
+    ),
+  );
+
+  /**
+   * load library "leaflet js"
+   */
+  $libraries['libraryinfo_leaflet'] = array(
+    'title' => 'Leaflet',
+    'version' => 'v0.7.7',
+    'website' => 'http://leafletjs.com/index.html',
+    'js' => array(
+      'http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js' => array('type' => 'external'),
+    ),
+    'css' => array(
+      'http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css' => array('type' => 'external'),
+    ),
+  );
+
+  /** - - - - - - return - - - - - - - - - - - - - - - - - - - - - - - - - -  */
+
+  return $libraries;
+}
+

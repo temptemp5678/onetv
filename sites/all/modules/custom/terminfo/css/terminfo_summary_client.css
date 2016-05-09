@@ -1,0 +1,9 @@
+.fa-toggle-wrapper i.fa{
+  cursor:pointer;
+}
+.fa-toggle-wrapper i.active{
+  color: #428bca;
+}
+.fa-toggle-wrapper i.inactive{
+  color: #f26411;
+}

@@ -1,0 +1,15 @@
+name = User Info
+description = Enhance feature to admin User, add User, edit User
+core = 7.x
+package = Zen Other
+
+;stylesheets[all][] = css/userinfo.css
+
+;scripts[] = js/userinfo.js
+
+files[] = class/user_action.class.inc
+files[] = class/user_form.class.inc
+files[] = class/user_query.class.inc
+files[] = class/userinfo.class.inc
+
+version  = 7.x-1.1

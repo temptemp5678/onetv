@@ -1,0 +1,127 @@
+<?php
+/**
+ * @file
+ *
+ */
+
+/**
+ * Implements hook_init()
+ */
+// function jsoninfo_init() {
+  // $JsonData = new JsonData();
+  // OtherCommonJson::saveDataToJson($JsonData->programData(), 'source/program_data.json');
+// }
+
+/**
+ * Implements hook_menu()
+ */
+function jsoninfo_menu() {
+  $items = array();
+
+  /**
+   * custom page
+   */
+  /** - - - - - - - page - - - - - - - - - - - - - - - - - - - - - - - -  */
+  $items['jsoninfo/jobboard/jobs/list'] = array(
+    'title' => 'Create JSON',
+    'page callback' => '_jsoninfo_jobboard_jobs_list',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+    'file' => 'inc/jsoninfo_api_page.page.inc',
+  );
+  $items['jsoninfo/jobboard/jobs/map'] = array(
+    'title' => 'Create JSON',
+    'page callback' => '_jsoninfo_jobboard_jobs_map',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+    'file' => 'inc/jsoninfo_api_page.page.inc',
+  );
+  $items['jsoninfo/jobboard/jobs/geomap.geojson'] = array(
+    'title' => 'Create JSON',
+    'page callback' => '_jsoninfo_jobboard_jobs_geomap',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+    'file' => 'inc/jsoninfo_api_page.page.inc',
+  );
+
+  /** - - - - - - - page - - - - - - - - - - - - - - - - - - - - - - - -  */
+  /**
+   * manage
+   */
+  /** - - - - - - node - - - - - - - - - - - - - - - - - - - - - - - -  */
+  $items['jsoninfo/node/meeting/create'] = array(
+      'title' => 'Create JSON',
+      'page callback' => '_jsoninfo_node_meeting_create',
+      'access arguments' => array('access content'),
+      'type' => MENU_CALLBACK,
+      'file' => 'inc/jsoninfo_api_node.page.inc',
+    );
+  $items['jsoninfo/node/meeting/edit'] = array(
+    'title' => 'Edit JSON',
+    'page callback' => '_jsoninfo_node_meeting_edit',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+    'file' => 'inc/jsoninfo_api_node.page.inc',
+  );
+
+  $items['jsoninfo/node/meeting/detail'] = array(
+    'title' => 'Create JSON',
+    'page callback' => '_jsoninfo_node_meeting_detail',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+    'file' => 'inc/jsoninfo_api_node.page.inc',
+  );
+
+  /** - - - - - - term - - - - - - - - - - - - - - - - - - - - - - - -  */
+  $items['jsoninfo/term/program/edit'] = array(
+    'title' => 'Create JSON',
+    'page callback' => '_jsoninfo_term_program_edit',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+    'file' => 'inc/jsoninfo_api_term.page.inc',
+  );
+  $items['jsoninfo/term/program/list'] = array(
+    'title' => 'Create JSON',
+    'page callback' => '_jsoninfo_term_program_list',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+    'file' => 'inc/jsoninfo_api_term.page.inc',
+  );
+
+  $items['jsoninfo/term/question-field/create'] = array(
+    'title' => 'Create JSON',
+    'page callback' => '_jsoninfo_term_question_field_create',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+    'file' => 'inc/jsoninfo_api_term.page.inc',
+  );
+
+  /** - - - - - - user - - - - - - - - - - - - - - - - - - - - - - - -  */
+  $items['jsoninfo/user/list'] = array(
+    'title' => 'Create JSON',
+    'page callback' => '_jsoninfo_user_list',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+    'file' => 'inc/jsoninfo_api_user.page.inc',
+  );
+  $items['jsoninfo/user/profile'] = array(
+    'title' => 'Create JSON',
+    'page callback' => '_jsoninfo_user_profile',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+    'file' => 'inc/jsoninfo_api_user.page.inc',
+  );
+
+  $items['jsoninfo/user-speaker/details'] = array(
+    'title' => 'Create JSON',
+    'page callback' => '_jsoninfo_user_speaker_details',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+    'file' => 'inc/jsoninfo_api_user.page.inc',
+  );
+
+  /** - - - - - - debug - - - - - - - - - - - - - - - - - - - - - - - -  */
+
+  return $items;
+}
+

@@ -1,0 +1,85 @@
+<?php
+/**
+ * @file
+ *
+ */
+
+/*
+ * Implementation of hook_init()
+ */
+function terminfo_init() {
+  // $product = commerce_product_load(848);
+  // dpm($product);
+
+  // $wrapper = entity_metadata_wrapper('commerce_product', $product);
+  // $wrapper->field_product_details->set('new');
+  // $wrapper->save();
+  // dpm($wrapper->field_product_details->value());
+  // $order = commerce_order_load(13);
+  // dpm($order);
+
+}
+
+/**
+ * Implements hook_menu()
+ */
+function terminfo_menu() {
+  $items = array();
+
+  /**
+   * Brand
+   */
+  $items['term/brand/add'] = array(
+    'title' => 'Create Brand',
+    'page callback' => '_terminfo_brand_add_term',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+    'file' => 'inc/terminfo_add_term.page.inc',
+  );
+  $items['term/brand/edit/%'] = array(
+    'title' => 'Edit Brand',
+    'page callback' => '_terminfo_basic_edit_term',
+    'page arguments' => array(3),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+    'file' => 'inc/terminfo_edit_term.page.inc',
+  );
+
+  /**
+   * client
+   */
+  $items['term/client/index'] = array(
+    'title' => 'Client List',
+    'page callback' => '_terminfo_client_index_list',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+    'file' => 'inc/terminfo_summary_list.page.inc',
+  );
+  $items['term/client/view/%'] = array(
+    'title' => 'View Client',
+    'page callback' => '_terminfo_client_view_term',
+    'page arguments' => array(3),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+    'file' => 'inc/terminfo_view_term.page.inc',
+  );
+
+  $items['term/client-action/addClientManager/%/%'] = array(
+    'title' => 'Edit Client',
+    'page callback' => '_term_client_action_add_client_manager',
+    'page arguments' => array(3, 4),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+    'file' => 'inc/term_client_action.page.inc',
+  );
+  $items['term/client-action/removeClientManager/%/%'] = array(
+    'title' => 'Edit Client',
+    'page callback' => '_term_client_action_remove_client_manager',
+    'page arguments' => array(3, 4),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+    'file' => 'inc/term_client_action.page.inc',
+  );
+
+  return $items;
+}
