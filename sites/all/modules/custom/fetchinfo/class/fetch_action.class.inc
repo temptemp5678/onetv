@@ -9,9 +9,7 @@
   $FetchAction->fetchAllChannel();
  */
 class FetchAction {
-
   /** - - - - - - action - - - - - - - - - - - - - - - - - - - - - - - - - -  */
-
   /**
    * @param, Channel Status is Enable or Disable
    * @return, tids array
@@ -23,8 +21,9 @@ class FetchAction {
     if (is_array($terms)) {
       foreach ($terms as $term) {
         $TermChannelInfo = new TermChannelInfo($term->tid);
-
         if ($enable) {
+
+dpm($TermChannelInfo->fieldValue('field_channel_status'));
           if ($TermChannelInfo->fieldValue('field_channel_status') == 1) {
             $channel_tids[] = $term->tid;
           }
@@ -44,8 +43,10 @@ class FetchAction {
    */
   public function fetchAllChannel($enable = TRUE) {
     $channel_tids = $this->allChannelTids($enable);
+    dpm($channel_tids);
     if (is_array($channel_tids)) {
       foreach ($channel_tids as $channel_tid) {
+        dpm($channel_tid);
         $channel_raw_content = $this->getChannelRawContent($channel_tid);
         $channel_program     = $this->getChannelProgram($channel_tid, $channel_raw_content);
         if ($channel_program) {
@@ -66,7 +67,7 @@ class FetchAction {
 
     if ($channel_rule) {
       preg_match_all($channel_rule, $channel_raw_content, $matches);
-      $output = $matches；
+      $output = $matches;
     }
 
     return $output;
@@ -107,6 +108,16 @@ class FetchAction {
         $output = file_get_contents($channel_url);
       }
     }
+
+    return $output;
+  }
+
+  /**
+   * @param, Channel Tid
+   * @return
+   */
+  public function guangXiRule() {
+    $output = NULL;
 
     return $output;
   }

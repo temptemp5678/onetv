@@ -175,8 +175,8 @@ class TermInfo {
    */
   public function fieldSafeValue($field_name = NULL) {
     $output = NULL;
-    if (isset($this->node->{$field_name}['und'][0]['safe_value'])) {
-      $output = $this->node->{$field_name}['und'][0]['safe_value'];
+    if (isset($this->term->{$field_name}['und'][0]['safe_value'])) {
+      $output = $this->term->{$field_name}['und'][0]['safe_value'];
     }
     return $output;
   }
@@ -186,8 +186,8 @@ class TermInfo {
    */
   public function fieldTargetId($field_name = NULL) {
     $output = NULL;
-    if (isset($this->node->{$field_name}['und'][0]['target_id'])) {
-      $output = $this->node->{$field_name}['und'][0]['target_id'];
+    if (isset($this->term->{$field_name}['und'][0]['target_id'])) {
+      $output = $this->term->{$field_name}['und'][0]['target_id'];
     }
     return $output;
   }
@@ -196,9 +196,9 @@ class TermInfo {
    */
   public function fieldTargetIdObject($field_name = NULL) {
     $output = NULL;
-    if (isset($this->node->{$field_name}['und'][0]['target_id'])) {
+    if (isset($this->term->{$field_name}['und'][0]['target_id'])) {
 
-      $TermInfo = new TermInfo($this->node->{$field_name}['und'][0]['target_id']);
+      $TermInfo = new TermInfo($this->term->{$field_name}['und'][0]['target_id']);
       if(!empty($TermInfo)) {
         $output = $TermInfo;
       }
@@ -211,8 +211,8 @@ class TermInfo {
    */
   public function fieldValue($field_name = NULL) {
     $output = NULL;
-    if (isset($this->node->{$field_name}['und'][0]['value'])) {
-      $output = $this->node->{$field_name}['und'][0]['value'];
+    if (isset($this->term->{$field_name}['und'][0]['value'])) {
+      $output = $this->term->{$field_name}['und'][0]['value'];
     }
     return $output;
   }
