@@ -9,14 +9,9 @@
  */
 function fetchinfo_cron() {
   /**
-   * update meeting from upcoming to completed
+   * fetch
    */
-  $NodeQuery = new NodeQuery();
-  $meeting_nids = $NodeQuery->allMeetingNid();
-
-  /** - - - - - - call fetch fn - - - - - - - - - - - - - - - - - - - -  */
-
-
-
+  $FetchAction = new FetchAction();
+  $channel_tids = $FetchAction->fetchAllChannel();
 
 }

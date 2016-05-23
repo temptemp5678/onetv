@@ -173,7 +173,7 @@ class TermInfo {
   /**
    * @return value
    */
-  public function fieldSafeValue($field_name = '') {
+  public function fieldSafeValue($field_name = NULL) {
     $output = NULL;
     if (isset($this->node->{$field_name}['und'][0]['safe_value'])) {
       $output = $this->node->{$field_name}['und'][0]['safe_value'];
@@ -184,7 +184,7 @@ class TermInfo {
   /**
    * @return value
    */
-  public function fieldTargetId($field_name = '') {
+  public function fieldTargetId($field_name = NULL) {
     $output = NULL;
     if (isset($this->node->{$field_name}['und'][0]['target_id'])) {
       $output = $this->node->{$field_name}['und'][0]['target_id'];
@@ -194,7 +194,7 @@ class TermInfo {
   /**
    * @return value
    */
-  public function fieldTargetIdObject($field_name = '') {
+  public function fieldTargetIdObject($field_name = NULL) {
     $output = NULL;
     if (isset($this->node->{$field_name}['und'][0]['target_id'])) {
 
@@ -209,7 +209,7 @@ class TermInfo {
   /**
    * @return value
    */
-  public function fieldValue($field_name = '') {
+  public function fieldValue($field_name = NULL) {
     $output = NULL;
     if (isset($this->node->{$field_name}['und'][0]['value'])) {
       $output = $this->node->{$field_name}['und'][0]['value'];
@@ -221,10 +221,10 @@ class TermInfo {
 
 /**
  * class
-   $TermClientInfo = new TermClientInfo($tid);
-   $TermClientInfo->userExistClientManage($uid);
+   $TermChannelInfo = new TermChannelInfo($tid);
+   $TermChannelInfo->userExistClientManage($uid);
  */
-class TermClientInfo extends TermInfo {
+class TermChannelInfo extends TermInfo {
   /**
    * @return String, contact_person
    */
