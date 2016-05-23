@@ -1,0 +1,22 @@
+<?php
+/**
+ * @file
+ *
+ */
+
+/**
+ * Implements hook_cron().
+ */
+function fetchinfo_cron() {
+  /**
+   * update meeting from upcoming to completed
+   */
+  $NodeQuery = new NodeQuery();
+  $meeting_nids = $NodeQuery->allMeetingNid();
+
+  /** - - - - - - call fetch fn - - - - - - - - - - - - - - - - - - - -  */
+
+
+
+
+}

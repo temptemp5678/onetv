@@ -8,5 +8,3 @@
  */
 function nodeinfo_init() {
 }
-
-
