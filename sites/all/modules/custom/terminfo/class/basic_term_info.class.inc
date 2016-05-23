@@ -218,6 +218,7 @@ class TermInfo {
   }
 
 }
+
 /**
  * class
    $TermClientInfo = new TermClientInfo($tid);
