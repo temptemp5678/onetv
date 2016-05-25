@@ -46,14 +46,14 @@ class NodeAction {
 
     // node_save() does not return a value. It instead populates the $node object.
     // Thus to check if the save was successful, we check the nid.
-    $node_id = $node->nid;
-    return $node_id;
+    $node_nid = $node->nid;
+    return $node_nid;
   }
 
   /**
    *  node_save() with Fields
    */
-  public function insertNodeFields($fields_content = array(), $title = NULL) {
+  public function insertNodeByFields($fields_content = array(), $title = NULL) {
     global $user;
 
     $node_title = 'Standard ' . $this->node_type . ' Node';
@@ -107,8 +107,10 @@ class NodeAction {
     $node = node_submit($node);
     node_save($node);
 
-    $nid = $node->nid;
-    watchdog('nodeinfo', 'node action insertNode() nid: @nid', array('@nid' => $nid));
+    $node_nid = $node->nid;
+    watchdog('nodeinfo', 'node action insertNode() nid: @nid', array('@nid' => $node_nid));
+
+    return $node_nid;
   }
 
 }
@@ -119,6 +121,42 @@ class NodeAction {
    $NodeQuoteAction->updateToConfirm($nid);
  */
 class NodeEpgAction extends NodeAction {
+  /**
+   *  node_save() with Fields
+   */
+  public function insertNodeByDateField($date = NULL, $title = NULL) {
+    global $user;
+
+    $node_title = 'Standard ' . $this->node_type . ' Node';
+    if ($title) {
+      $node_title = $title;
+    }
+
+    // We create a new node object
+    $node = new stdClass();
+    $node->type = $this->node_type;
+    $node->title = $node_title;
+    $node->language = LANGUAGE_NONE;
+
+    // Set some default values.
+    node_object_prepare($node);
+    $node->uid = $user->uid;
+
+    // custom fields
+    if ($date) {
+      $field_name = 'field_epg_date';
+      $node->{$field_name}[$node->language][$key]['value'] = $date;
+    }
+
+    // Prepare node for a submit and saving
+    $node = node_submit($node);
+    node_save($node);
+
+    $node_nid = $node->nid;
+    watchdog('nodeinfo', 'node action insertNode() nid: @nid', array('@nid' => $node_nid));
+
+    return $node_nid;
+  }
 
   /** Update field  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
   /**

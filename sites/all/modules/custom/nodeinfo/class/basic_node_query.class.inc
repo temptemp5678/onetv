@@ -78,8 +78,8 @@ class NodeEpgQuery extends NodeQuery {
       $nodes = node_load_multiple($nids);
       if ($nodes) {
         foreach($nodes as $node) {
-          $MeetingInfo = new MeetingInfo($node);
-          if (in_array($MeetingInfo->fieldTargetId('field_epg_channel'), $channel_tids)) {
+          $EpgInfo = new EpgInfo($node);
+          if (in_array($EpgInfo->fieldTargetId('field_epg_channel'), $channel_tids)) {
             $output[] = $node->nid;
           }
         }
@@ -96,15 +96,15 @@ class NodeEpgQuery extends NodeQuery {
    * @return array,
    *  nids
    */
-  public function nodesByDate($channel_tids = array(), $nids = array()) {
+  public function nodesByDate($date = NULL, $nids = array()) {
     $output = NULL;
 
     if (is_array($channel_tids)) {
       $nodes = node_load_multiple($nids);
       if ($nodes) {
         foreach($nodes as $node) {
-          $MeetingInfo = new MeetingInfo($node);
-          if (in_array($MeetingInfo->fieldTargetId('field_epg_channel'), $channel_tids)) {
+          $EpgInfo = new EpgInfo($node);
+          if ($EpgInfo->fieldTargetId('field_epg_date') == $date)) {
             $output[] = $node->nid;
           }
         }

@@ -44,11 +44,19 @@ dpm($TermChannelInfo->fieldValue('field_channel_status'));
   public function checkEpgNid($channel_tid = NULL, $channel_program_date = NULL) {
     $NodeEpgQuery = new NodeEpgQuery();
     $nids = $NodeEpgQuery->nodesByBundle(array('epg'));
-    $NodeEpgQuery->nodesByChannelTids(array($channel_tid), $nids);
+    $nids = $NodeEpgQuery->nodesByChannelTids(array($channel_tid), $nids);
+    $nids = $NodeEpgQuery->nodesByDate($channel_program_date, $nids);
 
-    $NodeAction = new NodeAction('epg');
-    $NodeAction->insertNodeFields($channel_program_date);
+    $output = NULL;
+    if (is_array($nids)) {
+      $output = current($nids);
+    }
+    else {
+      $NodeAction = new NodeAction('epg');
+      $output = $NodeAction->insertNodeByDateField($channel_program_date);
+    }
 
+    return $output;
   }
 
   /**
