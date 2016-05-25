@@ -22,8 +22,6 @@ class FetchAction {
       foreach ($terms as $term) {
         $TermChannelInfo = new TermChannelInfo($term->tid);
         if ($enable) {
-
-dpm($TermChannelInfo->fieldValue('field_channel_status'));
           if ($TermChannelInfo->fieldValue('field_channel_status') == 1) {
             $channel_tids[] = $term->tid;
           }
@@ -65,10 +63,9 @@ dpm($TermChannelInfo->fieldValue('field_channel_status'));
    */
   public function fetchAllChannel($enable = TRUE) {
     $channel_tids = $this->allChannelTids($enable);
-    dpm($channel_tids);
+
     if (is_array($channel_tids)) {
       foreach ($channel_tids as $channel_tid) {
-        dpm($channel_tid);
         $channel_raw_content = $this->getChannelRawContent($channel_tid);
         $channel_program     = $this->getChannelProgram($channel_tid, $channel_raw_content);
         if ($channel_program) {
@@ -129,9 +126,35 @@ dpm($TermChannelInfo->fieldValue('field_channel_status'));
       $TermChannelInfo = new TermChannelInfo($channel_tid);
       $channel_url     = $TermChannelInfo->fieldValue('field_channel_url');
       if ($channel_url) {
-        $output = file_get_contents($channel_url);
+        $output = $this->getContentByCurl($channel_url);
+        dpm($output);
       }
     }
+
+    return $output;
+  }
+
+  /**
+   * instead of using file_get_contents($channel_url);
+   */
+  function getContentByCurl($Url = NULL) {
+    if (!function_exists('curl_init')){
+      die('CURL is not installed!');
+    }
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $Url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+    $result = curl_exec($ch);
+    if ($result === false) {
+      throw new Exception('Can not download URL');
+    }
+    else {
+      $output = $result;
+    }
+
+    curl_close($ch);
 
     return $output;
   }
