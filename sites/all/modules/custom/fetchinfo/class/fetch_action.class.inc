@@ -41,6 +41,20 @@ dpm($TermChannelInfo->fieldValue('field_channel_status'));
    * @param, Channel Status is Enable or Disable
    * @return, tids array
    */
+  public function checkEpgNid($channel_tid = NULL, $channel_program_date = NULL) {
+    $NodeEpgQuery = new NodeEpgQuery();
+    $nids = $NodeEpgQuery->nodesByBundle(array('epg'));
+    $NodeEpgQuery->nodesByChannelTids(array($channel_tid), $nids);
+
+    $NodeAction = new NodeAction('epg');
+    $NodeAction->insertNodeFields($channel_program_date);
+
+  }
+
+  /**
+   * @param, Channel Status is Enable or Disable
+   * @return, tids array
+   */
   public function fetchAllChannel($enable = TRUE) {
     $channel_tids = $this->allChannelTids($enable);
     dpm($channel_tids);
@@ -50,10 +64,12 @@ dpm($TermChannelInfo->fieldValue('field_channel_status'));
         $channel_raw_content = $this->getChannelRawContent($channel_tid);
         $channel_program     = $this->getChannelProgram($channel_tid, $channel_raw_content);
         if ($channel_program) {
+          $node_nid = checkEpgNid($channel_tid, $channel_program['program_date']);
+
           $NodeAction = new NodeAction('epg');
           $NodeAction->insertNodeFields($channel_program);
+          $NodeAction->updateFields($channel_program);
         }
-
       }
     }
   }

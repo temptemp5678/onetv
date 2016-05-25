@@ -5,11 +5,10 @@
 
 /**
  * class
- * $NodeQuery = new NodeQuery($nid);
+   $NodeQuery = new NodeQuery();
+   $NodeQuery->nodesByBundle(array('page'));
  */
 class NodeQuery {
-
-  /** - - - - - - common - - - - - - - - - - - - - - - - - - - - - - - - - -  */
   /**
    * @parameter, $node_type is array()
    *
@@ -18,7 +17,6 @@ class NodeQuery {
    * only NODE_PUBLISHED
    */
   public function nodesByBundle($node_type = array()) {
-
     $query = new EntityFieldQuery;
     $query->entityCondition('entity_type', 'node')
       ->entityCondition('bundle', $node_type)
@@ -43,7 +41,6 @@ class NodeQuery {
    *  Node both for PUBLISHED or not
    */
   public function allNodesByBundle($node_type = array()) {
-
     $query = new EntityFieldQuery;
     $query->entityCondition('entity_type', 'node')
       ->entityCondition('bundle', $node_type);
@@ -59,8 +56,61 @@ class NodeQuery {
 
     return $nid_array;
   }
+}
 
-  /** - - - - - - other - - - - - - - - - - - - - - - - - - - - - - - - - -  */
+/**
+ * class
+   $NodeEpgQuery = new NodeEpgQuery();
+   $NodeEpgQuery->nodesByChannelTids();
+ */
+class NodeEpgQuery extends NodeQuery {
+  /**
+   * @parameter
+   *  array,
+   *
+   * @return array,
+   *  nids
+   */
+  public function nodesByChannelTids($channel_tids = array(), $nids = array()) {
+    $output = NULL;
 
+    if (is_array($channel_tids)) {
+      $nodes = node_load_multiple($nids);
+      if ($nodes) {
+        foreach($nodes as $node) {
+          $MeetingInfo = new MeetingInfo($node);
+          if (in_array($MeetingInfo->fieldTargetId('field_epg_channel'), $channel_tids)) {
+            $output[] = $node->nid;
+          }
+        }
+      }
+    }
 
+    return $output;
+  }
+
+  /**
+   * @parameter
+   *  array,
+   *
+   * @return array,
+   *  nids
+   */
+  public function nodesByDate($channel_tids = array(), $nids = array()) {
+    $output = NULL;
+
+    if (is_array($channel_tids)) {
+      $nodes = node_load_multiple($nids);
+      if ($nodes) {
+        foreach($nodes as $node) {
+          $MeetingInfo = new MeetingInfo($node);
+          if (in_array($MeetingInfo->fieldTargetId('field_epg_channel'), $channel_tids)) {
+            $output[] = $node->nid;
+          }
+        }
+      }
+    }
+
+    return $output;
+  }
 }

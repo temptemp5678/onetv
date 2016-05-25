@@ -264,71 +264,9 @@ class NodeInfo {
 /** - - - - - - common node - - - - - - - - - - - - - - - - - - - - - - - -  */
 /**
  * class
-   $JobsInfo = new JobsInfo($nid);
-   $JobsInfo->clientName();
+   $epgInfo = new epgInfo($nid);
+   $epgInfo->clientName();
  */
-class JobsInfo extends NodeInfo {
-  /**
-   * @return Integer, Term Tid
-   */
-  public function clientTid() {
-    $output = NULL;
-    if (isset($this->node->field_quote_client['und'][0]['target_id'])) {
-      $output = $this->node->field_quote_client['und'][0]['target_id'];
-    }
-    return $output;
-  }
-  /**
-    * @return String, Term Property
-    */
-  public function clientName() {
-    $output = NULL;
+class epgInfo extends NodeInfo {
 
-    $TermInfo = new TermInfo($this->clientTid());
-    if(!empty($TermInfo)) {
-      $output = $TermInfo->termName();
-    }
-    return $output;
-  }
-  /**
-   * @return Object, Term Property
-   */
-  public function clientObject() {
-    $output = NULL;
-
-    $TermClientInfo = new TermClientInfo($this->clientTid());
-    if(!empty($TermClientInfo)) {
-      $output = $TermClientInfo;
-    }
-    return $output;
-  }
-
-  /**
-   * @return integer, date unix stamp for quote order time
-   */
-  public function datePostedTimeUnixStamp() {
-    $output = NULL;
-    if (isset($this->node->field_jobs_date_posted['und'][0]['value'])) {
-      $output = $this->node->field_jobs_date_posted['und'][0]['value'];
-    }
-    return $output;
-  }
-  /**
-   * @return integer, date unix stamp
-   */
-  public function datePostedTimeValue($format = NULL) {
-    if (!$format) {
-      $format = "Y-m-d";
-    }
-
-    $output = NULL;
-    $stamp = $this->datePostedTimeUnixStamp();
-    if ($stamp) {
-      $output = format_date($stamp, 'custom', $format);
-    }
-    return $output;
-  }
-
-
-  /** - - - - - - other - - - - - - - - - - - - - - - - - - - - - - - - - -  */
 }
