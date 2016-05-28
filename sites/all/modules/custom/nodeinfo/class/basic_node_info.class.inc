@@ -264,9 +264,9 @@ class NodeInfo {
 /** - - - - - - common node - - - - - - - - - - - - - - - - - - - - - - - -  */
 /**
  * class
-   $epgInfo = new epgInfo($nid);
-   $epgInfo->clientName();
+   $EpgInfo = new EpgInfo($nid);
+   $EpgInfo->clientName();
  */
-class epgInfo extends NodeInfo {
+class EpgInfo extends NodeInfo {
 
 }
