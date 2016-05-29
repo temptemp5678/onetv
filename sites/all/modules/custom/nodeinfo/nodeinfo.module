@@ -8,3 +8,22 @@
  */
 function nodeinfo_init() {
 }
+
+/**
+ * Implements hook_menu()
+ */
+function nodeinfo_menu() {
+  $items = array();
+
+  /** - - - - - - epg - - - - - - - - - - - - - - - - - - - - - - - - - -  */
+  $items['epg/program/view'] = array(
+    'title' => 'Program View',
+    'page callback' => '_epg_program_view',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+    'file' => 'inc/epg_program_view.page.inc',
+  );
+
+
+  return $items;
+}

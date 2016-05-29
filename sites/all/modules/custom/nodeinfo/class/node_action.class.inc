@@ -118,13 +118,13 @@ class NodeAction {
 /**
  * class
    $NodeEpgAction = new NodeEpgAction('epg');
-   $NodeEpgAction->insertNodeByDateField('2016-05-28');
+   $NodeEpgAction->insertNodeByChannelDate(2, '2016-05-28');
  */
 class NodeEpgAction extends NodeAction {
   /**
    *  node_save() with Fields
    */
-  public function insertNodeByDateField($date = NULL, $title = NULL) {
+  public function insertNodeByChannelDate($channel_tid = NULL, $date = NULL, $title = NULL) {
     global $user;
 
     $node_title = 'Standard ' . $this->node_type . ' Node';
@@ -142,6 +142,11 @@ class NodeEpgAction extends NodeAction {
     node_object_prepare($node);
     $node->uid = $user->uid;
 
+    // custom fields
+    if ($channel_tid) {
+      $field_name = 'field_epg_channel';
+      $node->{$field_name}[$node->language][0]['target_id'] = $channel_tid;
+    }
     // custom fields
     if ($date) {
       $field_name = 'field_epg_date';
@@ -163,24 +168,29 @@ class NodeEpgAction extends NodeAction {
    * Update field
    */
   public function updateFields($nid = NULL, $fields_content = array()) {
+    dpm($fields_content);
     $node = node_load($nid);
     if ($node) {
       // custom fields
       foreach ($fields_content as $field_name => $row) {
         $field_info = field_info_field($field_name);
         if ($field_info) {
+          dpm($field_name);
           $field_type = $field_info['type'];
 
           switch ($field_type) {
-            case 'answersetfield':                            // custom field
+            case 'datestamp':                                 // custom field
+            case 'list_integer':
+            case 'number_integer':
+            case 'text':
+            case 'text_long':
               $node->{$field_name}['und'] = array();          // set empty firstly
               if (isset($row['und'])) {
                 foreach ($row['und'] as $key => $value) {
-                  $node->{$field_name}['und'][$key]['answerset_queslibr_tid'] = $value['answerset_queslibr_tid'];
-                  $node->{$field_name}['und'][$key]['answerset_quesfield_tid'] = $value['answerset_quesfield_tid'];
-                  $node->{$field_name}['und'][$key]['answerset_answer'] = $value['answerset_answer'];
+                  $node->{$field_name}[$node->language][$key]['value'] = $value;
                 }
               }
+
               break;
 
             case 'entityreference':

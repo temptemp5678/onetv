@@ -56,7 +56,7 @@ class FetchAction {
     }
     else {
       $NodeEpgAction = new NodeEpgAction('epg');
-      $output = $NodeEpgAction->insertNodeByDateField($channel_program_date_timestamp);
+      $output = $NodeEpgAction->insertNodeByChannelDate($channel_tid, $channel_program_date_timestamp);
     }
 
     return $output;

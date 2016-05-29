@@ -11,7 +11,7 @@ function fetchinfo_cron() {
   /**
    * fetch
    */
-  $FetchAction = new FetchAction();
-  $channel_tids = $FetchAction->fetchAllChannel();
+  // $FetchAction = new FetchAction();
+  // $channel_tids = $FetchAction->fetchAllChannel();
 
 }

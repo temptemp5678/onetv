@@ -259,6 +259,17 @@ class NodeInfo {
     }
     return $output;
   }
+
+  /**
+   * @return value
+   */
+  public function fieldValueAllArray($field_name = '') {
+    $output = NULL;
+    if (isset($this->node->{$field_name}['und'])) {
+      $output = $this->node->{$field_name}['und'];
+    }
+    return $output;
+  }
 }
 
 /** - - - - - - common node - - - - - - - - - - - - - - - - - - - - - - - -  */
@@ -268,5 +279,21 @@ class NodeInfo {
    $EpgInfo->clientName();
  */
 class EpgInfo extends NodeInfo {
+
+  /**
+   * @return integer, date unix stamp
+   */
+  public function dateTimeValue($format = NULL) {
+    if (!$format) {
+      $format = "Y-m-d";
+    }
+
+    $output = NULL;
+    $stamp = $this->fieldValue('field_epg_date');
+    if ($stamp) {
+      $output = format_date($stamp, 'custom', $format);
+    }
+    return $output;
+  }
 
 }
