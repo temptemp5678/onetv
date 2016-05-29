@@ -66,8 +66,8 @@ class FetchAction {
 
     if (is_array($channel_tids)) {
       foreach ($channel_tids as $channel_tid) {
-        $channel_raw_content = $this->getChannelRawContent($channel_tid);
-        $channel_program     = $this->getChannelProgram($channel_tid, $channel_raw_content);
+        $page_raw_content = $this->getChannelRawContent($channel_tid);
+        $channel_program     = $this->getChannelProgram($channel_tid, $page_raw_content);
         if ($channel_program) {
           $node_nid = checkEpgNid($channel_tid, $channel_program['program_date']);
 
@@ -83,11 +83,11 @@ class FetchAction {
    * @param, Channel Rule
    * @return
    */
-  public function filterContent($channel_rule = NULL, $channel_raw_content = NULL) {
+  public function filterContent($channel_rule = NULL, $page_raw_content = NULL) {
     $output = NULL;
 
     if ($channel_rule) {
-      preg_match_all($channel_rule, $channel_raw_content, $matches);
+      preg_match_all($channel_rule, $page_raw_content, $matches);
       $output = $matches;
     }
 
@@ -103,7 +103,7 @@ class FetchAction {
        'program_content' => array(),
      );
    */
-  public function getChannelProgram($channel_tid = NULL, $channel_raw_content = NULL) {
+  public function getChannelProgram($channel_tid = NULL, $page_raw_content = NULL) {
     $output = NULL;
 
     if ($channel_tid) {
@@ -113,7 +113,7 @@ class FetchAction {
 
       if ($channel_url && $channel_rule) {
         $output['program_date']    = format_date(time(), 'custom', 'Y-m-d', 'Hongkong');
-        $output['program_content'] = filterContent($channel_rule, $channel_raw_content);
+        $output['program_content'] = filterContent($channel_rule, $page_raw_content);
       }
     }
 

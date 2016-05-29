@@ -6,7 +6,7 @@
 /**
  * class
   $FetchRules = new FetchRules();
-  $FetchRules->fetchAllChannel();
+  $FetchRules->divArea();
  */
 class FetchRules {
   /**
