@@ -80,14 +80,37 @@ class FetchAction {
   }
 
   /**
-   * @param, Channel Rule
+   * filter Program Content
+   * @param, Channel Tid
    * @return
-   */
-  public function filterContent($channel_rule = NULL, $page_raw_content = NULL) {
-    $output = NULL;
 
-    if ($channel_rule) {
-      preg_match_all($channel_rule, $page_raw_content, $matches);
+     $FetchAction = new FetchAction();
+     $contents = $FetchAction->filterContent(2, $FetchAction->getContentByCurl('http://program.gxtv.cn'));
+
+     dpm($contents[0]);
+   */
+  public function filterContent($channel_tid = NULL, $page_raw_content = NULL) {
+    $output = NULL;
+    $divRules = NULL;
+    $cleanContent = NULL;
+
+    switch ($channel_tid) {
+      case 2:
+        $FetchRulesChannel2 = new FetchRulesChannel2();
+        $cleanContent = $FetchRulesChannel2->cleanContent($page_raw_content);
+        $divRules     = $FetchRulesChannel2->divRules();
+        break;
+
+      default:
+        break;
+    }
+
+    if (is_array($divRules)) {
+      foreach ($divRules as $channel_rule) {
+        preg_match_all($channel_rule, $cleanContent, $matches);
+        $cleanContent = $matches[0][0];
+      }
+
       $output = $matches;
     }
 
@@ -109,11 +132,10 @@ class FetchAction {
     if ($channel_tid) {
       $TermChannelInfo  = new TermChannelInfo($channel_tid);
       $channel_url      = $TermChannelInfo->fieldValue('field_channel_url');
-      $channel_rule     = $this->guangXiRule();
 
       if ($channel_url && $channel_rule) {
         $output['program_date']    = format_date(time(), 'custom', 'Y-m-d', 'Hongkong');
-        $output['program_content'] = filterContent($channel_rule, $page_raw_content);
+        $output['program_content'] = filterContent($channel_tid, $page_raw_content);
       }
     }
 
