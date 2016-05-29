@@ -8,20 +8,41 @@
   $FetchRules = new FetchRules();
   $FetchRules->divArea();
 
-    $FetchRules = new FetchRules();
-    //$filter = $FetchRules->filterContent($FetchRules->divArea(), $FetchRules->guangXiContent());
-    // $filter = $FetchRules->filterContent($FetchRules->divArea(), file_get_contents('http://program.gxtv.cn'));
-    preg_match_all("/<div class=\"Program_guide\">(.*?)</div></div>/", file_get_contents('http://program.gxtv.cn'), $filter);
-    dpm($filter);
+  $FetchAction = new FetchAction();
+  $FetchRules = new FetchRules();
+  $contents = $FetchRules->cleanContent($FetchAction->getContentByCurl('http://program.gxtv.cn'));
+  $filter = $FetchRules->filterContent($FetchRules->divArea(), $contents);
+  dpm($filter);
+
+  $programs = $FetchRules->filterContent($FetchRules->divProgram(), $filter[0][0]);
+  dpm($programs[0]);
  */
 class FetchRules {
+  /**
+   * @return,
+   */
+  public function divArea() {
+    $output = '/<div class=\"Program_guide\">(.*?)<\/div>/';
+    return $output;
+  }
+  /**
+   * @return,
+   */
+  public function divProgram() {
+    $output = '/<li><span>(.*?)<\/span>(.*?)<\/li>/';
+    return $output;
+  }
+
   /**
    * tid = 2,
    * @return, tids array
    */
-  public function divArea() {
-    $output = "/<div class=\"Program_guide\">(.*?)</div></div>/";
-    return $output;
+  public function cleanContent($contents) {
+    $contents = str_replace("\r\n", '', $contents); //清除换行符
+    $contents = str_replace("\n", '', $contents);   //清除换行符
+    $contents = str_replace("\t", '', $contents);   //清除制表符
+    // $contents = str_replace(" ", '', $contents);    //清除空格符
+    return $contents ;
   }
 
   public function filterContent($channel_rule = NULL, $page_raw_content = NULL) {
