@@ -34,7 +34,6 @@ class FetchRules {
   }
 
   /**
-   * tid = 2,
    * @return, tids array
    */
   public function cleanContent($contents) {
@@ -45,6 +44,9 @@ class FetchRules {
     return $contents ;
   }
 
+ /**
+  *
+  */
   public function filterContent($channel_rule = NULL, $page_raw_content = NULL) {
     $output = NULL;
 
@@ -66,10 +68,23 @@ class FetchRules {
     return $output;
   }
 
-  /** - - - - - - content - - - - - - - - - - - - - - - - - - - - - - - - - -  */
-  /**
-   * tid = 2,
-   * @return, tids array
-   */
+}
+
+/**
+ * class
+   $FetchRulesChannel2 = new FetchRulesChannel2('meeting');
+   $FetchRulesChannel2->divArea($nid);
+
+   $FetchAction = new FetchAction();
+   $FetchRules = new FetchRules();
+   $contents = $FetchRules->cleanContent($FetchAction->getContentByCurl('http://program.gxtv.cn'));
+
+   $filter = FetchAction->filterContent($FetchRules->divArea(), $contents);
+   dpm($filter);
+
+   $programs = FetchAction->filterContent($FetchRules->divProgram(), $filter[0][0]);
+   dpm($programs[0]);
+ */
+class FetchRulesChannel2 extends FetchRules {
 
 }
