@@ -117,8 +117,8 @@ class NodeAction {
 
 /**
  * class
-   $NodeQuoteAction = new NodeQuoteAction('meeting');
-   $NodeQuoteAction->updateToConfirm($nid);
+   $NodeEpgAction = new NodeEpgAction('epg');
+   $NodeEpgAction->insertNodeByDateField('2016-05-28');
  */
 class NodeEpgAction extends NodeAction {
   /**
@@ -145,7 +145,7 @@ class NodeEpgAction extends NodeAction {
     // custom fields
     if ($date) {
       $field_name = 'field_epg_date';
-      $node->{$field_name}[$node->language][$key]['value'] = $date;
+      $node->{$field_name}[$node->language][0]['value'] = $date;
     }
 
     // Prepare node for a submit and saving

@@ -40,18 +40,23 @@ class FetchAction {
    * @return, tids array
    */
   public function checkEpgNid($channel_tid = NULL, $channel_program_date = NULL) {
+    // timezone is site timezone
+    // $d2 = new DateTime($channel_program_date, new DateTimeZone('Asia/Hong_Kong'));
+    $d1 = new DateTime($channel_program_date);
+    $channel_program_date_timestamp = $d1->getTimestamp();
+
     $NodeEpgQuery = new NodeEpgQuery();
     $nids = $NodeEpgQuery->nodesByBundle(array('epg'));
     $nids = $NodeEpgQuery->nodesByChannelTids(array($channel_tid), $nids);
-    $nids = $NodeEpgQuery->nodesByDate($channel_program_date, $nids);
+    $nids = $NodeEpgQuery->nodesByDate($channel_program_date_timestamp, $nids);
 
     $output = NULL;
     if (is_array($nids)) {
       $output = current($nids);
     }
     else {
-      $NodeAction = new NodeAction('epg');
-      $output = $NodeAction->insertNodeByDateField($channel_program_date);
+      $NodeEpgAction = new NodeEpgAction('epg');
+      $output = $NodeEpgAction->insertNodeByDateField($channel_program_date_timestamp);
     }
 
     return $output;
@@ -68,12 +73,12 @@ class FetchAction {
       foreach ($channel_tids as $channel_tid) {
         $page_raw_content = $this->getChannelRawContent($channel_tid);
         $channel_program     = $this->getChannelProgram($channel_tid, $page_raw_content);
+
         if ($channel_program) {
-          $node_nid = checkEpgNid($channel_tid, $channel_program['program_date']);
+          $node_nid = $this->checkEpgNid($channel_tid, $channel_program['program_date']);
 
           $NodeAction = new NodeAction('epg');
-          $NodeAction->insertNodeFields($channel_program);
-          $NodeAction->updateFields($channel_program);
+          $NodeAction->updateFields($node_nid, $channel_program);
         }
       }
     }
@@ -84,10 +89,20 @@ class FetchAction {
    * @param, Channel Tid
    * @return
 
+     $channel_tid = 2;
      $FetchAction = new FetchAction();
-     $contents = $FetchAction->filterContent(2, $FetchAction->getContentByCurl('http://program.gxtv.cn'));
+     $contents = $FetchAction->filterContent($channel_tid, $FetchAction->getContentByCurl('http://program.gxtv.cn'));
 
      dpm($contents[0]);
+
+     $node_nid = $FetchAction->checkEpgNid($channel_tid, '2016-05-28');
+dpm($node_nid);
+
+
+     $channel_program = array();
+     $channel_program['field_epg_program']['und'] = $contents[0];
+     $NodeEpgAction = new $NodeEpgAction('epg');
+     $NodeEpgAction->updateFields($node_nid, $channel_program);
    */
   public function filterContent($channel_tid = NULL, $page_raw_content = NULL) {
     $output = NULL;

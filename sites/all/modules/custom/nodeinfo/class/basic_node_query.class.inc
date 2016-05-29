@@ -99,12 +99,12 @@ class NodeEpgQuery extends NodeQuery {
   public function nodesByDate($date = NULL, $nids = array()) {
     $output = NULL;
 
-    if (is_array($channel_tids)) {
+    if (is_array($nids)) {
       $nodes = node_load_multiple($nids);
       if ($nodes) {
         foreach($nodes as $node) {
           $EpgInfo = new EpgInfo($node);
-          if ($EpgInfo->fieldTargetId('field_epg_date') == $date)) {
+          if ($EpgInfo->fieldValue('field_epg_date') == $date) {
             $output[] = $node->nid;
           }
         }
