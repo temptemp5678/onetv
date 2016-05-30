@@ -89,19 +89,18 @@ class FetchAction {
    * @param, Channel Tid
    * @return
 
-     $channel_tid = 2;
+     $channel_tid = 4;
      $FetchAction = new FetchAction();
-     $contents = $FetchAction->filterContent($channel_tid, $FetchAction->getContentByCurl('http://program.gxtv.cn'));
+     $contents = $FetchAction->filterContent($channel_tid, $FetchAction->getContentByCurl('http://www.tvmao.com/program_satellite/AHTV1-w1.html'));
 
      dpm($contents[0]);
 
      $node_nid = $FetchAction->checkEpgNid($channel_tid, '2016-05-28');
 dpm($node_nid);
 
-
      $channel_program = array();
      $channel_program['field_epg_program']['und'] = $contents[0];
-     $NodeEpgAction = new $NodeEpgAction('epg');
+     $NodeEpgAction = new NodeEpgAction('epg');
      $NodeEpgAction->updateFields($node_nid, $channel_program);
    */
   public function filterContent($channel_tid = NULL, $page_raw_content = NULL) {
@@ -116,6 +115,12 @@ dpm($node_nid);
         $divRules     = $FetchRulesChannel2->divRules();
         break;
 
+      case 2:
+        $FetchRulesChannel4 = new FetchRulesChannel4();
+        $cleanContent = $FetchRulesChannel4->cleanContent($page_raw_content);
+        $divRules     = $FetchRulesChannel4->divRules();
+        break;
+
       default:
         break;
     }
@@ -125,6 +130,21 @@ dpm($node_nid);
         preg_match_all($channel_rule, $cleanContent, $matches);
         $cleanContent = $matches[0][0];
       }
+
+      $output = $matches;
+    }
+
+    return $output;
+  }
+
+  /**
+   * single preg_match_all()
+   */
+  public function pregMatchAllContent($divRule = NULL, $page_raw_content = NULL) {
+    $output = NULL;
+
+    if ($divRule) {
+      preg_match_all($divRule, $page_raw_content, $matches);
 
       $output = $matches;
     }

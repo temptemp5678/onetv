@@ -44,28 +44,46 @@ class FetchRules {
   }
 
   /**
-   * @return, pass contents
+   * @return, tids array
    */
-  public function cleanContent($contents) {
-    return $contents ;
+  public function cleanContent($contents = NULL) {
+    $contents = str_replace("\r\n", '', $contents); //清除换行符
+    $contents = str_replace("\n", '', $contents);   //清除换行符
+    $contents = str_replace("\t", '', $contents);   //清除制表符
+    // $contents = str_replace(" ", '', $contents);    //清除空格符
+
+    return $contents;
   }
 
+  /**
+   * @return, remove unwanted characters as "<a href>.. </a>"
+
+     $row = '<li><span class="am">00:28</span> <a title="新安夜空"  href="/tvcolumn/Vig4" tp="12" res="2016-05-30 00:28_Vig4" >新安夜空    </li>';
+     $FetchRulesChannel4 = new FetchRulesChannel4();
+     dpm($FetchRulesChannel4->removeATag($row));
+   */
+  public function removeATag($contents = NULL) {
+    $contents = preg_replace('/<a (.*?)>/', '', $contents);
+    $output = preg_replace('/<\/a>/', '', $contents);
+
+    return $output;
+  }
 }
 
 /**
  * class
    Tid is 2, GuagnXi
-   $FetchRulesChannel2 = new FetchRulesChannel2('meeting');
+   $FetchRulesChannel2 = new FetchRulesChannel2();
    $FetchRulesChannel2->divArea($nid);
 
    $FetchAction = new FetchAction();
    $FetchRulesChannel2 = new FetchRulesChannel2();
-   $contents = FetchRulesChannel2->cleanContent($FetchAction->getContentByCurl('http://program.gxtv.cn'));
+   $contents = $FetchRulesChannel2->cleanContent($FetchAction->getContentByCurl('http://program.gxtv.cn'));
 
-   $filter = $FetchAction->filterContent(FetchRulesChannel2->divArea(), $contents);
+   $filter = $FetchAction->filterContent($FetchRulesChannel2->divArea(), $contents);
    dpm($filter);
 
-   $programs = $FetchAction->filterContent(FetchRulesChannel2->divProgram(), $filter[0][0]);
+   $programs = $FetchAction->filterContent($FetchRulesChannel2->divProgram(), $filter[0][0]);
    dpm($programs[0]);
  */
 class FetchRulesChannel2 extends FetchRules {
@@ -105,16 +123,90 @@ class FetchRulesChannel2 extends FetchRules {
     return $output;
   }
 
-  /**
-   * @return, tids array
-   */
-  public function cleanContent($contents = NULL) {
-    $contents = str_replace("\r\n", '', $contents); //清除换行符
-    $contents = str_replace("\n", '', $contents);   //清除换行符
-    $contents = str_replace("\t", '', $contents);   //清除制表符
-    // $contents = str_replace(" ", '', $contents);    //清除空格符
 
-    return $contents ;
+}
+
+/**
+ * class
+   Tid is 4, AnHui
+   $FetchRulesChannel4 = new FetchRulesChannel4('meeting');
+   $FetchRulesChannel4->divArea($nid);
+
+   $FetchAction = new FetchAction();
+   $FetchRulesChannel4 = new FetchRulesChannel4();
+
+   $raw_contents = $FetchAction->getContentByCurl('http://www.tvmao.com/program_satellite/AHTV1-w1.html');
+   $contents = $FetchRulesChannel4->cleanContent($raw_contents);
+   // dpm($contents);
+   $filter = $FetchAction->pregMatchAllContent($FetchRulesChannel4->divArea(), $contents);
+
+   $programs = $FetchAction->pregMatchAllContent($FetchRulesChannel4->divProgram(), $filter[0][0]);
+
+   $new_programs = array();
+   foreach($programs[0] as $row) {
+     $temp = $FetchRulesChannel4->removeATag($row);
+     $new_programs[] = $FetchRulesChannel4->removeDivTag($temp);
+   }
+   dpm($new_programs);
+
+   $channel_tid = 4;
+    $node_nid = $FetchAction->checkEpgNid($channel_tid, '2016-05-28');
+    dpm($node_nid);
+
+    $channel_program = array();
+    $channel_program['field_epg_program']['und'] = $new_programs;
+    $NodeEpgAction = new NodeEpgAction('epg');
+    $NodeEpgAction->updateFields($node_nid, $channel_program);
+ */
+class FetchRulesChannel4 extends FetchRules {
+  /**
+   * @return,
+   */
+  public function convertPageCode($contents = NULL) {
+    $output = mb_convert_encoding($str, "UTF-8", "GBK");   // 已知原编码为GBK，转换为utf-8
+    $output = mb_convert_encoding($str, "UTF-8", "auto");  // 未知原编码，通过auto自动检测后，转换编码为utf-8
+    return $output;
+  }
+
+  /**
+   * @return,
+   */
+  public function divArea() {
+    $output = '/<ul  id="pgrow">(.*?)<\/ul>/s';
+    return $output;
+  }
+
+  /**
+   * @return,
+   */
+  public function divProgram() {
+    $output = '/<li><span class="am">(.*?)<\/span>(.*?)<\/li>/';
+    return $output;
+  }
+
+  /**
+   * @return Array
+   */
+  public function divRules() {
+    $output = array(
+      $this->divArea(),
+      $this->divProgram(),
+    );
+    return $output;
+  }
+
+
+  /**
+   * @return, remove unwanted characters as "<a href>.. </a>"
+
+     $row = '<li><span class="am">00:28</span> <a title="新安夜空"  href="/tvcolumn/Vig4" tp="12" res="2016-05-30 00:28_Vig4" >新安夜空    </li>';
+     $FetchRulesChannel4 = new FetchRulesChannel4();
+     dpm($FetchRulesChannel4->removeATag($row));
+   */
+  public function removeDivTag($contents = NULL) {
+    $output = preg_replace('/<div (.*?)<\/div>/', '', $contents);
+
+    return $output;
   }
 
 }

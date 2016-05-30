@@ -8,7 +8,6 @@ function _epg_program_view($nid = NULL) {
   if ($nid) {
     $node = node_load($nid);
     $EpgInfo = new EpgInfo($nid);
-dpm($EpgInfo->fieldValueAllArray('field_epg_program'));
     $output .= '<div class="panel panel-default">';
       $output .= '<div class="panel-heading bg-4ab2de color-fff">';
         $output .= $EpgInfo->fieldTargetIdObject('field_epg_channel')->termName();
