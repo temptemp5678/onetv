@@ -105,7 +105,6 @@ class FetchRules {
  * class
    Tid is 2, GuagnXi
    $FetchRulesChannel2 = new FetchRulesChannel2();
-   $FetchRulesChannel2->divArea($nid);
 
    $FetchAction = new FetchAction();
    $FetchRulesChannel2 = new FetchRulesChannel2();
@@ -142,6 +141,22 @@ class FetchRulesChannel2 extends FetchRules {
       $this->divArea(),
       $this->divProgram(),
     );
+    return $output;
+  }
+
+  /**
+   * @return Array
+   */
+  public function filterContent($raw_page = NULL) {
+    $contents = $FetchRulesChannel2->cleanContent($FetchAction->getContentByCurl('http://program.gxtv.cn'));
+
+    preg_match_all($this->divArea(), $contents, $matches);
+    $cleanContent = $matches[0][0];
+
+    preg_match_all($this->divProgram(), $cleanContent, $matches);
+    $cleanContent = $matches[0][0];
+
+    $output = $cleanContent;
     return $output;
   }
 
