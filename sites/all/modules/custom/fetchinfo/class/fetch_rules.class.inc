@@ -21,27 +21,12 @@ class FetchRules {
   /**
    * @return,
    */
-  public function divArea() {
-    $output = '/<div class=\"Program_guide\">(.*?)<\/div>/';
+  public function convertPageCode($contents = NULL) {
+    $output = mb_convert_encoding($str, "UTF-8", "GBK");   // 已知原编码为GBK，转换为utf-8
+    $output = mb_convert_encoding($str, "UTF-8", "auto");  // 未知原编码，通过auto自动检测后，转换编码为utf-8
     return $output;
   }
 
-  /**
-   * @return,
-   */
-  public function divProgram() {
-    $output = '/<li><span>(.*?)<\/span>(.*?)<\/li>/';
-    return $output;
-  }
-
-  /**
-   * @return Array
-   */
-  public function divRules() {
-    $output = NULL;
-
-    return $output;
-  }
 
   /**
    * @return, tids array
@@ -56,6 +41,33 @@ class FetchRules {
   }
 
   /**
+   * @return,
+   * $output = '/<div class=\"Program_guide\">(.*?)<\/div>/';
+   */
+  public function divArea() {
+
+    $output = NULL;
+    return $output;
+  }
+
+  /**
+   * @return,
+   * $output = '/<li><span>(.*?)<\/span>(.*?)<\/li>/';
+   */
+  public function divProgram() {
+    $output = NULL;
+    return $output;
+  }
+
+  /**
+   * @return Array
+   */
+  public function divRules() {
+    $output = NULL;
+    return $output;
+  }
+
+  /**
    * @return, remove unwanted characters as "<a href>.. </a>"
 
      $row = '<li><span class="am">00:28</span> <a title="新安夜空"  href="/tvcolumn/Vig4" tp="12" res="2016-05-30 00:28_Vig4" >新安夜空    </li>';
@@ -67,6 +79,25 @@ class FetchRules {
     $output = preg_replace('/<\/a>/', '', $contents);
 
     return $output;
+  }
+
+  /**
+   * @return, remove unwanted characters as "<a href>.. </a>"
+
+     $row = '<li><span class="am">00:28</span> <a title="新安夜空"  href="/tvcolumn/Vig4" tp="12" res="2016-05-30 00:28_Vig4" >新安夜空    </li>';
+     $FetchRulesChannel4 = new FetchRulesChannel4();
+     dpm($FetchRulesChannel4->removeATag($row));
+   */
+  public function removeDivTag($contents = NULL) {
+    $output = preg_replace('/<div (.*?)<\/div>/', '', $contents);
+    return $output;
+  }
+
+  /**
+   * @return,
+   */
+  public function other($contents = NULL) {
+    // preg split ($pattern,$subject)用于匹配到的字符进行切断，匹配到一个就断开一次，产生多个数组，，，和php中的explode很像
   }
 }
 
@@ -87,15 +118,6 @@ class FetchRules {
    dpm($programs[0]);
  */
 class FetchRulesChannel2 extends FetchRules {
-  /**
-   * @return,
-   */
-  public function convertPageCode($contents = NULL) {
-    $output = mb_convert_encoding($str, "UTF-8", "GBK");   // 已知原编码为GBK，转换为utf-8
-    $output = mb_convert_encoding($str, "UTF-8", "auto");  // 未知原编码，通过auto自动检测后，转换编码为utf-8
-    return $output;
-  }
-
   /**
    * @return,
    */
@@ -122,7 +144,6 @@ class FetchRulesChannel2 extends FetchRules {
     );
     return $output;
   }
-
 
 }
 
@@ -162,15 +183,6 @@ class FetchRulesChannel4 extends FetchRules {
   /**
    * @return,
    */
-  public function convertPageCode($contents = NULL) {
-    $output = mb_convert_encoding($str, "UTF-8", "GBK");   // 已知原编码为GBK，转换为utf-8
-    $output = mb_convert_encoding($str, "UTF-8", "auto");  // 未知原编码，通过auto自动检测后，转换编码为utf-8
-    return $output;
-  }
-
-  /**
-   * @return,
-   */
   public function divArea() {
     $output = '/<ul  id="pgrow">(.*?)<\/ul>/s';
     return $output;
@@ -192,20 +204,6 @@ class FetchRulesChannel4 extends FetchRules {
       $this->divArea(),
       $this->divProgram(),
     );
-    return $output;
-  }
-
-
-  /**
-   * @return, remove unwanted characters as "<a href>.. </a>"
-
-     $row = '<li><span class="am">00:28</span> <a title="新安夜空"  href="/tvcolumn/Vig4" tp="12" res="2016-05-30 00:28_Vig4" >新安夜空    </li>';
-     $FetchRulesChannel4 = new FetchRulesChannel4();
-     dpm($FetchRulesChannel4->removeATag($row));
-   */
-  public function removeDivTag($contents = NULL) {
-    $output = preg_replace('/<div (.*?)<\/div>/', '', $contents);
-
     return $output;
   }
 
