@@ -71,8 +71,8 @@ class FetchAction {
 
     if (is_array($channel_tids)) {
       foreach ($channel_tids as $channel_tid) {
-        $page_raw_content = $this->getChannelRawContent($channel_tid);
-        $channel_program     = $this->getChannelProgram($channel_tid, $page_raw_content);
+        $raw_content = $this->getChannelRawContent($channel_tid);
+        $channel_program     = $this->getChannelProgram($channel_tid, $raw_content);
 
         if ($channel_program) {
           $node_nid = $this->checkEpgNid($channel_tid, $channel_program['program_date']);
@@ -91,9 +91,9 @@ class FetchAction {
 
      $channel_tid = 4;
      $FetchAction = new FetchAction();
-     $contents = $FetchAction->filterContent($channel_tid, $FetchAction->getContentByCurl('http://www.tvmao.com/program_satellite/AHTV1-w1.html'));
-
-     dpm($contents[0]);
+     $raw_content = $FetchAction->getChannelRawContent($channel_tid);
+     $result = $FetchAction->filterContent($channel_tid, $raw_content);
+     dpm($result);
 
      $node_nid = $FetchAction->checkEpgNid($channel_tid, '2016-05-28');
 dpm($node_nid);
@@ -103,35 +103,14 @@ dpm($node_nid);
      $NodeEpgAction = new NodeEpgAction('epg');
      $NodeEpgAction->updateFields($node_nid, $channel_program);
    */
-  public function filterContent($channel_tid = NULL, $page_raw_content = NULL) {
+  public function filterContent($channel_tid = NULL, $raw_content = NULL) {
     $output = NULL;
-    $divRules = NULL;
-    $cleanContent = NULL;
 
-    switch ($channel_tid) {
-      case 2:
-        $FetchRulesChannel2 = new FetchRulesChannel2();
-        $cleanContent = $FetchRulesChannel2->cleanContent($page_raw_content);
-        $divRules     = $FetchRulesChannel2->divRules();
-        break;
+    if ($channel_tid) {
+      $class_name = 'FetchRulesChannel' . $channel_tid;
 
-      case 2:
-        $FetchRulesChannel4 = new FetchRulesChannel4();
-        $cleanContent = $FetchRulesChannel4->cleanContent($page_raw_content);
-        $divRules     = $FetchRulesChannel4->divRules();
-        break;
-
-      default:
-        break;
-    }
-
-    if (is_array($divRules)) {
-      foreach ($divRules as $channel_rule) {
-        preg_match_all($channel_rule, $cleanContent, $matches);
-        $cleanContent = $matches[0][0];
-      }
-
-      $output = $matches;
+      $FetchRulesChannel = new $class_name;
+      $output = $FetchRulesChannel->filterContent($raw_content);
     }
 
     return $output;
@@ -140,11 +119,11 @@ dpm($node_nid);
   /**
    * single preg_match_all()
    */
-  public function pregMatchAllContent($divRule = NULL, $page_raw_content = NULL) {
+  public function pregMatchAllContent($divRule = NULL, $raw_content = NULL) {
     $output = NULL;
 
     if ($divRule) {
-      preg_match_all($divRule, $page_raw_content, $matches);
+      preg_match_all($divRule, $raw_content, $matches);
 
       $output = $matches;
     }
@@ -161,7 +140,7 @@ dpm($node_nid);
        'program_content' => array(),
      );
    */
-  public function getChannelProgram($channel_tid = NULL, $page_raw_content = NULL) {
+  public function getChannelProgram($channel_tid = NULL, $raw_content = NULL) {
     $output = NULL;
 
     if ($channel_tid) {
@@ -170,7 +149,7 @@ dpm($node_nid);
 
       if ($channel_url && $channel_rule) {
         $output['program_date']    = format_date(time(), 'custom', 'Y-m-d', 'Hongkong');
-        $output['program_content'] = filterContent($channel_tid, $page_raw_content);
+        $output['program_content'] = filterContent($channel_tid, $raw_content);
       }
     }
 
@@ -189,7 +168,6 @@ dpm($node_nid);
       $channel_url     = $TermChannelInfo->fieldValue('field_channel_url');
       if ($channel_url) {
         $output = $this->getContentByCurl($channel_url);
-        dpm($output);
       }
     }
 

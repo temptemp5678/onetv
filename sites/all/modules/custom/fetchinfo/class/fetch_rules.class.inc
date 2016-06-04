@@ -104,8 +104,9 @@ class FetchRules {
 /**
  * class
    Tid is 2, GuagnXi
+   $FetchAction = new FetchAction();
    $FetchRulesChannel2 = new FetchRulesChannel2();
-   dpm($FetchRulesChannel2->filterContent());
+   dpm($FetchRulesChannel2->filterContent($FetchAction->getContentByCurl('http://program.gxtv.cn')));
  */
 class FetchRulesChannel2 extends FetchRules {
   /**
@@ -128,8 +129,7 @@ class FetchRulesChannel2 extends FetchRules {
    * @return Array, filter result
    */
   public function filterContent($raw_page = NULL) {
-    $FetchAction = new FetchAction();
-    $contents = $this->cleanContent($FetchAction->getContentByCurl('http://program.gxtv.cn'));
+    $contents = $this->cleanContent($raw_page);
 
     preg_match_all($this->divArea(), $contents, $matches);
     $cleanContent = $matches[0][0];
@@ -146,8 +146,9 @@ class FetchRulesChannel2 extends FetchRules {
 /**
  * class
    Tid is 4, AnHui
+   $FetchAction = new FetchAction();
    $FetchRulesChannel4 = new FetchRulesChannel4();
-   dpm($FetchRulesChannel4->filterContent());
+   dpm($FetchRulesChannel4->filterContent($FetchAction->getContentByCurl('http://www.tvmao.com/program_satellite/AHTV1-w1.html')));
 
    $channel_tid = 4;
     $node_nid = $FetchAction->checkEpgNid($channel_tid, '2016-05-28');
@@ -190,8 +191,7 @@ class FetchRulesChannel4 extends FetchRules {
    * @return Array, filter result
    */
   public function filterContent($raw_page = NULL) {
-    $FetchAction = new FetchAction();
-    $contents = $this->cleanContent($FetchAction->getContentByCurl('http://www.tvmao.com/program_satellite/AHTV1-w1.html'));
+    $contents = $this->cleanContent($raw_page);
 
     preg_match_all($this->divArea(), $contents, $matches);
     $cleanContent = $matches[0][0];
