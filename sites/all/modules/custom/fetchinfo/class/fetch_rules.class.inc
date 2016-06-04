@@ -146,32 +146,15 @@ class FetchRulesChannel2 extends FetchRules {
 /**
  * class
    Tid is 4, AnHui
-   $FetchRulesChannel4 = new FetchRulesChannel4('meeting');
-   $FetchRulesChannel4->divArea($nid);
-
-   $FetchAction = new FetchAction();
    $FetchRulesChannel4 = new FetchRulesChannel4();
-
-   $raw_contents = $FetchAction->getContentByCurl('http://www.tvmao.com/program_satellite/AHTV1-w1.html');
-   $contents = $FetchRulesChannel4->cleanContent($raw_contents);
-   // dpm($contents);
-   $filter = $FetchAction->pregMatchAllContent($FetchRulesChannel4->divArea(), $contents);
-
-   $programs = $FetchAction->pregMatchAllContent($FetchRulesChannel4->divProgram(), $filter[0][0]);
-
-   $new_programs = array();
-   foreach($programs[0] as $row) {
-     $temp = $FetchRulesChannel4->removeATag($row);
-     $new_programs[] = $FetchRulesChannel4->removeDivTag($temp);
-   }
-   dpm($new_programs);
+   dpm($FetchRulesChannel4->filterContent());
 
    $channel_tid = 4;
     $node_nid = $FetchAction->checkEpgNid($channel_tid, '2016-05-28');
     dpm($node_nid);
 
     $channel_program = array();
-    $channel_program['field_epg_program']['und'] = $new_programs;
+    $channel_program['field_epg_program']['und'] = FetchRulesChannel4->filterContent();
     $NodeEpgAction = new NodeEpgAction('epg');
     $NodeEpgAction->updateFields($node_nid, $channel_program);
  */
@@ -208,7 +191,7 @@ class FetchRulesChannel4 extends FetchRules {
    */
   public function filterContent($raw_page = NULL) {
     $FetchAction = new FetchAction();
-    $contents = $this->cleanContent($FetchAction->getContentByCurl('http://program.gxtv.cn'));
+    $contents = $this->cleanContent($FetchAction->getContentByCurl('http://www.tvmao.com/program_satellite/AHTV1-w1.html'));
 
     preg_match_all($this->divArea(), $contents, $matches);
     $cleanContent = $matches[0][0];
@@ -216,7 +199,13 @@ class FetchRulesChannel4 extends FetchRules {
     preg_match_all($this->divProgram(), $cleanContent, $matches);
     $cleanContent = $matches[0];
 
-    $output = $cleanContent;
+    $output = NULL;
+    if (isset($cleanContent)) {
+      foreach ($cleanContent as $key => $value) {
+        $output[] = $this->removeDivTag($this->removeATag($value));
+      }
+    }
+
     return $output;
   }
 
