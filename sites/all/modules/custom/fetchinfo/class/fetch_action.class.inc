@@ -71,15 +71,22 @@ class FetchAction {
 
     if (is_array($channel_tids)) {
       foreach ($channel_tids as $channel_tid) {
-        $raw_content = $this->getChannelRawContent($channel_tid);
-        $channel_program     = $this->getChannelProgram($channel_tid, $raw_content);
+        $this->fetchChannel($channel_tid);
+      }
+    }
+  }
 
-        if ($channel_program) {
-          $node_nid = $this->checkEpgNid($channel_tid, $channel_program['program_date']);
+  /**
+   * @param, fetch one channel
+   * @return,
+   */
+  public function fetchChannel($channel_tid = NULL) {
+    $TermChannelInfo = new TermChannelInfo($channel_tid);
+    $channel_urls    = $TermChannelInfo->channelUrlArray();
 
-          $NodeAction = new NodeAction('epg');
-          $NodeAction->updateFields($node_nid, $channel_program);
-        }
+    if (is_array($channel_urls)) {
+      foreach ($channel_urls as $channel_url) {
+        $this->saveChannelProgram($channel_tid, $channel_url);
       }
     }
   }
@@ -90,16 +97,9 @@ class FetchAction {
    * @return
 
      $channel_tid = 4;
-     $FetchAction = new FetchAction();
-     $raw_content = $FetchAction->getChannelRawContent($channel_tid);
-     $result = $FetchAction->filterContent($channel_tid, $raw_content);
-     dpm($result);
-
      $node_nid = $FetchAction->checkEpgNid($channel_tid, '2016-05-28');
 dpm($node_nid);
 
-     $channel_program = array();
-     $channel_program['field_epg_program']['und'] = $contents[0];
      $NodeEpgAction = new NodeEpgAction('epg');
      $NodeEpgAction->updateFields($node_nid, $channel_program);
    */
@@ -111,21 +111,6 @@ dpm($node_nid);
 
       $FetchRulesChannel = new $class_name;
       $output = $FetchRulesChannel->filterContent($raw_content);
-    }
-
-    return $output;
-  }
-
-  /**
-   * single preg_match_all()
-   */
-  public function pregMatchAllContent($divRule = NULL, $raw_content = NULL) {
-    $output = NULL;
-
-    if ($divRule) {
-      preg_match_all($divRule, $raw_content, $matches);
-
-      $output = $matches;
     }
 
     return $output;
@@ -160,30 +145,24 @@ dpm($node_nid);
    * @param, Channel Tid
    * @return
    */
-  public function getChannelRawContent($channel_tid = NULL) {
+  public function getPageRawContent($page_url = NULL) {
     $output = NULL;
-
-    if ($channel_tid) {
-      $TermChannelInfo = new TermChannelInfo($channel_tid);
-      $channel_url     = $TermChannelInfo->fieldValue('field_channel_url');
-      if ($channel_url) {
-        $output = $this->getContentByCurl($channel_url);
-      }
+    if ($channel_url) {
+      $output = $this->getContentByCurl($channel_url);
     }
-
     return $output;
   }
 
   /**
    * instead of using file_get_contents($channel_url);
    */
-  function getContentByCurl($Url = NULL) {
+  public function getContentByCurl($url = NULL) {
     if (!function_exists('curl_init')){
       die('CURL is not installed!');
     }
 
     $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $Url);
+    curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
     $result = curl_exec($ch);
@@ -197,6 +176,21 @@ dpm($node_nid);
     curl_close($ch);
 
     return $output;
+  }
+
+  /**
+   *
+   */
+  public function saveChannelProgram($channel_tid = NULL, $channel_url = NULL) {
+    $raw_content = $this->getPageRawContent($channel_url);
+    $channel_program = $this->getChannelProgram($channel_tid, $raw_content);
+
+    if ($channel_program) {
+      $node_nid = $this->checkEpgNid($channel_tid, $channel_program['program_date']);
+
+      $NodeAction = new NodeAction('epg');
+      $NodeAction->updateFields($node_nid, $channel_program);
+    }
   }
 
 }

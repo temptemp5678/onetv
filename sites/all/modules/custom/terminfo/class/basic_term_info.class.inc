@@ -239,6 +239,20 @@ class TermChannelInfo extends TermInfo {
   /**
    * @return array, integer, client Manage User UID Array
    */
+  public function channelUrlArray() {
+    $output = NULL;
+
+    if (isset($this->term->field_channel_url['und'][0]['value'])) {
+      foreach ($this->term->field_channel_url['und'] as $key => $value) {
+        $output[] = $value['value'];
+      }
+    }
+    return $output;
+  }
+
+  /**
+   * @return array, integer, client Manage User UID Array
+   */
   public function clientManageUserArray() {
     $output = NULL;
 
