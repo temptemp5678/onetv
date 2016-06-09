@@ -168,14 +168,13 @@ class NodeEpgAction extends NodeAction {
    * Update field
    */
   public function updateFields($nid = NULL, $fields_content = array()) {
-    dpm($fields_content);
+dpm($fields_content);
     $node = node_load($nid);
     if ($node) {
       // custom fields
       foreach ($fields_content as $field_name => $row) {
         $field_info = field_info_field($field_name);
         if ($field_info) {
-          dpm($field_name);
           $field_type = $field_info['type'];
 
           switch ($field_type) {
@@ -186,6 +185,7 @@ class NodeEpgAction extends NodeAction {
             case 'text_long':
               $node->{$field_name}['und'] = array();          // set empty firstly
               if (isset($row['und'])) {
+                dpm(190);
                 foreach ($row['und'] as $key => $value) {
                   $node->{$field_name}[$node->language][$key]['value'] = $value;
                 }

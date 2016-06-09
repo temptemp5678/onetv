@@ -210,3 +210,59 @@ class FetchRulesChannel4 extends FetchRules {
   }
 
 }
+
+/**
+ * class
+   Tid is 6, 全纪实 SiTV
+ */
+class FetchRulesChannel6 extends FetchRules {
+  /**
+   * @return,
+   */
+  public function divArea() {
+    $output = '/<ul  id="pgrow">(.*?)<\/ul>/s';
+    return $output;
+  }
+
+  /**
+   * @return,
+   */
+  public function divProgram() {
+    $output = '/<li><span class="am">(.*?)<\/span>(.*?)<\/li>/';
+    return $output;
+  }
+
+  /**
+   * @return Array
+   */
+  public function divRules() {
+    $output = array(
+      $this->divArea(),
+      $this->divProgram(),
+    );
+    return $output;
+  }
+
+  /**
+   * @return Array, filter result
+   */
+  public function filterContent($raw_page = NULL) {
+    $contents = $this->cleanContent($raw_page);
+
+    preg_match_all($this->divArea(), $contents, $matches);
+    $cleanContent = $matches[0][0];
+
+    preg_match_all($this->divProgram(), $cleanContent, $matches);
+    $cleanContent = $matches[0];
+
+    $output = NULL;
+    if (isset($cleanContent)) {
+      foreach ($cleanContent as $key => $value) {
+        $output[] = $this->removeDivTag($this->removeATag($value));
+      }
+    }
+
+    return $output;
+  }
+
+}

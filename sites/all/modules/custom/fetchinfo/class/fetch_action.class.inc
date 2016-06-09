@@ -79,6 +79,9 @@ class FetchAction {
   /**
    * @param, fetch one channel
    * @return,
+
+   $FetchAction = new FetchAction();
+   $FetchAction->fetchChannel(6);
    */
   public function fetchChannel($channel_tid = NULL) {
     $TermChannelInfo = new TermChannelInfo($channel_tid);
@@ -87,6 +90,9 @@ class FetchAction {
     if (is_array($channel_urls)) {
       foreach ($channel_urls as $channel_url) {
         $this->saveChannelProgram($channel_tid, $channel_url);
+dpm(90);
+        break;
+
       }
     }
   }
@@ -95,13 +101,6 @@ class FetchAction {
    * filter Program Content
    * @param, Channel Tid
    * @return
-
-     $channel_tid = 4;
-     $node_nid = $FetchAction->checkEpgNid($channel_tid, '2016-05-28');
-dpm($node_nid);
-
-     $NodeEpgAction = new NodeEpgAction('epg');
-     $NodeEpgAction->updateFields($node_nid, $channel_program);
    */
   public function filterContent($channel_tid = NULL, $raw_content = NULL) {
     $output = NULL;
@@ -132,9 +131,9 @@ dpm($node_nid);
       $TermChannelInfo  = new TermChannelInfo($channel_tid);
       $channel_url      = $TermChannelInfo->fieldValue('field_channel_url');
 
-      if ($channel_url && $channel_rule) {
+      if ($channel_url) {
         $output['program_date']    = format_date(time(), 'custom', 'Y-m-d', 'Hongkong');
-        $output['program_content'] = filterContent($channel_tid, $raw_content);
+        $output['field_epg_program']['und'] = $this->filterContent($channel_tid, $raw_content);
       }
     }
 
@@ -145,7 +144,7 @@ dpm($node_nid);
    * @param, Channel Tid
    * @return
    */
-  public function getPageRawContent($page_url = NULL) {
+  public function getPageRawContent($channel_url = NULL) {
     $output = NULL;
     if ($channel_url) {
       $output = $this->getContentByCurl($channel_url);
@@ -188,8 +187,8 @@ dpm($node_nid);
     if ($channel_program) {
       $node_nid = $this->checkEpgNid($channel_tid, $channel_program['program_date']);
 
-      $NodeAction = new NodeAction('epg');
-      $NodeAction->updateFields($node_nid, $channel_program);
+      $NodeEpgAction = new NodeEpgAction('epg');
+      $NodeEpgAction->updateFields($node_nid, $channel_program);
     }
   }
 
