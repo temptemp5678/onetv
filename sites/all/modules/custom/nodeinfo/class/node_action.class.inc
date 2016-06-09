@@ -185,7 +185,6 @@ dpm($fields_content);
             case 'text_long':
               $node->{$field_name}['und'] = array();          // set empty firstly
               if (isset($row['und'])) {
-                dpm(190);
                 foreach ($row['und'] as $key => $value) {
                   $node->{$field_name}[$node->language][$key]['value'] = $value;
                 }

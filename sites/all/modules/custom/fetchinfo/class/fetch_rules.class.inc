@@ -60,14 +60,6 @@ class FetchRules {
   }
 
   /**
-   * @return Array
-   */
-  public function divRules() {
-    $output = NULL;
-    return $output;
-  }
-
-  /**
    * @return, remove unwanted characters as "<a href>.. </a>"
 
      $row = '<li><span class="am">00:28</span> <a title="新安夜空"  href="/tvcolumn/Vig4" tp="12" res="2016-05-30 00:28_Vig4" >新安夜空    </li>';
@@ -177,17 +169,6 @@ class FetchRulesChannel4 extends FetchRules {
   }
 
   /**
-   * @return Array
-   */
-  public function divRules() {
-    $output = array(
-      $this->divArea(),
-      $this->divProgram(),
-    );
-    return $output;
-  }
-
-  /**
    * @return Array, filter result
    */
   public function filterContent($raw_page = NULL) {
@@ -219,6 +200,44 @@ class FetchRulesChannel6 extends FetchRules {
   /**
    * @return,
    */
+  public function dateArea() {
+    $output = '/<dd class="levle1cur">(.*?)<\/dd>/s';
+    return $output;
+  }
+  /**
+   * @return,
+   */
+  public function dateValue() {
+    $output = '/(\(.*?\))/s';
+    return $output;
+  }
+
+  /**
+   * @return Array, filter result
+   */
+  public function filterDate($raw_page = NULL) {
+    $contents = $this->cleanContent($raw_page);
+
+    preg_match_all($this->divArea(), $contents, $matches);
+    $cleanContent = $matches[0][0];
+
+    preg_match_all($this->divProgram(), $cleanContent, $matches);
+    $cleanContent = $matches[0];
+
+    $output = NULL;
+    if (isset($cleanContent)) {
+      foreach ($cleanContent as $key => $value) {
+        $output[] = $this->removeDivTag($this->removeATag($value));
+      }
+    }
+
+    return $output;
+  }
+
+  /**  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+  /**
+   * @return,
+   */
   public function divArea() {
     $output = '/<ul  id="pgrow">(.*?)<\/ul>/s';
     return $output;
@@ -229,17 +248,6 @@ class FetchRulesChannel6 extends FetchRules {
    */
   public function divProgram() {
     $output = '/<li><span class="am">(.*?)<\/span>(.*?)<\/li>/';
-    return $output;
-  }
-
-  /**
-   * @return Array
-   */
-  public function divRules() {
-    $output = array(
-      $this->divArea(),
-      $this->divProgram(),
-    );
     return $output;
   }
 
