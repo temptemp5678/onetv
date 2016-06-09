@@ -116,6 +116,24 @@ dpm(90);
   }
 
   /**
+   * filter Program Content
+   * @param, Channel Tid
+   * @return
+   */
+  public function filterDate($channel_tid = NULL, $raw_content = NULL) {
+    $output = NULL;
+
+    if ($channel_tid) {
+      $class_name = 'FetchRulesChannel' . $channel_tid;
+
+      $FetchRulesChannel = new $class_name;
+      $output = $FetchRulesChannel->filterDate($raw_content);
+    }
+
+    return $output;
+  }
+
+  /**
    * use rule to get program date and content
    * @param, Channel Tid
    * @return,
@@ -132,7 +150,8 @@ dpm(90);
       $channel_url      = $TermChannelInfo->fieldValue('field_channel_url');
 
       if ($channel_url) {
-        $output['program_date']    = format_date(time(), 'custom', 'Y-m-d', 'Hongkong');
+        // $output['program_date'] = format_date(time(), 'custom', 'Y-m-d', 'Hongkong');
+        $output['program_date'] = $this->filterDate($channel_tid, $raw_content);
         $output['field_epg_program']['und'] = $this->filterContent($channel_tid, $raw_content);
       }
     }
@@ -185,10 +204,10 @@ dpm(90);
     $channel_program = $this->getChannelProgram($channel_tid, $raw_content);
 
     if ($channel_program) {
-      $node_nid = $this->checkEpgNid($channel_tid, $channel_program['program_date']);
+      // $node_nid = $this->checkEpgNid($channel_tid, $channel_program['program_date']);
 
-      $NodeEpgAction = new NodeEpgAction('epg');
-      $NodeEpgAction->updateFields($node_nid, $channel_program);
+      // $NodeEpgAction = new NodeEpgAction('epg');
+      // $NodeEpgAction->updateFields($node_nid, $channel_program);
     }
   }
 

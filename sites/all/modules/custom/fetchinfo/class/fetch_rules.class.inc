@@ -208,7 +208,8 @@ class FetchRulesChannel6 extends FetchRules {
    * @return,
    */
   public function dateValue() {
-    $output = '/(\(.*?\))/s';
+    $output = '/([0-9]?)/s';
+    // $output = '/(\(.*\))/s';
     return $output;
   }
 
@@ -218,17 +219,15 @@ class FetchRulesChannel6 extends FetchRules {
   public function filterDate($raw_page = NULL) {
     $contents = $this->cleanContent($raw_page);
 
-    preg_match_all($this->divArea(), $contents, $matches);
-    $cleanContent = $matches[0][0];
-
-    preg_match_all($this->divProgram(), $cleanContent, $matches);
+    preg_match_all($this->dateArea(), $contents, $matches);
+    $cleanContent = $matches[0][1];
+    preg_match_all($this->dateValue(), $cleanContent, $matches);
     $cleanContent = $matches[0];
 
+dpm($cleanContent);
     $output = NULL;
     if (isset($cleanContent)) {
-      foreach ($cleanContent as $key => $value) {
-        $output[] = $this->removeDivTag($this->removeATag($value));
-      }
+      $output = $cleanContent;
     }
 
     return $output;
