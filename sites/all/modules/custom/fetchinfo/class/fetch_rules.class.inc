@@ -208,7 +208,7 @@ class FetchRulesChannel6 extends FetchRules {
    * @return,
    */
   public function dateValue() {
-    $output = '/([0-9]?)/s';
+    $output = '/.*\((.*)\)/s';
     // $output = '/(\(.*\))/s';
     return $output;
   }
@@ -222,7 +222,7 @@ class FetchRulesChannel6 extends FetchRules {
     preg_match_all($this->dateArea(), $contents, $matches);
     $cleanContent = $matches[0][1];
     preg_match_all($this->dateValue(), $cleanContent, $matches);
-    $cleanContent = $matches[0];
+    $cleanContent = $matches;
 
 dpm($cleanContent);
     $output = NULL;
